@@ -1,0 +1,16 @@
+{
+  "name": "shakedown",
+  "owner": {
+    "name": "Andrew Leach"
+  },
+  "metadata": {
+    "description": "Shake down a PR in the running app with Claude in Chrome before it merges."
+  },
+  "plugins": [
+    {
+      "name": "shakedown",
+      "source": "./",
+      "description": "Walk every page a PR reaches in Chrome, confirm regressions on base, and post a screenshot board, findings and coverage to the PR."
+    }
+  ]
+}

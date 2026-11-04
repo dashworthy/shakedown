@@ -1,0 +1,11 @@
+{
+  "name": "shakedown",
+  "description": "Shake down a PR in the running app before it merges: map the diff to every page, link and form it reaches, walk each one in Chrome for regressions, broken behavior, bad or inconsistent UI and confusing flows, confirm regressions on the base branch, and post a tldraw board of every screenshot, the findings and the coverage as a PR comment. Report-only — never edits app code.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Andrew Leach",
+    "email": "7387639+andyleach@users.noreply.github.com"
+  },
+  "license": "MIT",
+  "keywords": ["qa", "code-review", "browser", "claude-in-chrome", "tldraw", "regressions", "ui", "report-only"]
+}
