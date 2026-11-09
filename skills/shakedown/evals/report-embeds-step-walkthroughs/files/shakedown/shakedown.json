@@ -1,0 +1,102 @@
+{
+  "title": "PR 142 shakedown, d38c9f9 vs develop",
+  "target": { "kind": "pr", "ref": "142", "head": "d38c9f9", "base": "develop" },
+  "run": "k3x9",
+  "app": {
+    "url": "http://localhost",
+    "role": "Agent",
+    "writes": true,
+    "db": "./vendor/bin/sail mysql",
+    "base": { "url": "http://localhost:8081", "db": "./vendor/bin/sail mysql" }
+  },
+  "out_of_scope": [],
+  "features": [
+    {
+      "id": "F1",
+      "name": "Add several lines to an order",
+      "kind": "changed",
+      "pages": [{ "name": "Order sidebar", "url": "http://localhost/orders?order=new" }],
+      "via": ["resources/js/Pages/Orders/OrderSidebar.tsx", "app/Http/Requests/StoreOrderRequest.php"],
+      "tables": ["orders", "order_lines"],
+      "expected_from": ["PR description"],
+      "scenarios": [
+        {
+          "id": "F1.S1",
+          "type": "success",
+          "op": "create",
+          "title": "Create an order with two products",
+          "setup": "Signed in as Agent, on the Orders page",
+          "steps": [
+            "Click New order",
+            "Type \"Office restock (shakedown k3x9 F1.S1)\" in Reference",
+            "Click Add line and choose Blue mug × 2",
+            "Click Add line and choose Red mug × 1",
+            "Click Save"
+          ],
+          "expected": "The order is listed with 3 items",
+          "db": { "query": "select l.product, l.quantity from order_lines l join orders o on o.id = l.order_id where o.reference like '%(shakedown k3x9 F1.S1)%'", "expect": "2 rows: Blue mug × 2, Red mug × 1", "actual": "2 rows: Blue mug × 2, Red mug × 1" },
+          "status": "pass",
+          "shots": [
+            { "step": 1, "image": "shakedown/shots/F1.S1-1.png" },
+            { "step": 2, "image": "shakedown/shots/F1.S1-2.png" },
+            { "step": 3, "image": "shakedown/shots/F1.S1-3.png" },
+            { "step": 4, "image": "shakedown/shots/F1.S1-4.png" },
+            { "step": 5, "image": "shakedown/shots/F1.S1-5.png" }
+          ],
+          "image": "shakedown/shots/F1.S1-5.png"
+        },
+        {
+          "id": "F1.S2",
+          "type": "success",
+          "op": "update",
+          "title": "Remove one line from a saved order",
+          "setup": "F1.S1's order, with Blue mug × 2 and Red mug × 1",
+          "steps": ["Open the order \"Office restock (shakedown k3x9 F1.S1)\"", "Click Remove on the Red mug row", "Click Save", "Reload the page"],
+          "expected": "Only Blue mug × 2 is listed after reload",
+          "db": { "query": "select l.product, l.quantity, l.deleted_at from order_lines l join orders o on o.id = l.order_id where o.reference like '%(shakedown k3x9 F1.S1)%'", "expect": "1 row: Blue mug × 2", "before": "2 rows: Blue mug × 2, Red mug × 1", "actual": "2 rows: Blue mug × 2, and the removed Red mug × 1 still there" },
+          "status": "fail",
+          "actual": "The sidebar shows one row, but a reload brings the Red mug back",
+          "evidence": "PUT /orders/88 returned 200",
+          "severity": "major",
+          "why": "A line the agent removed still ships to the customer",
+          "verdict": "regression",
+          "shots": [
+            { "step": 1, "image": "shakedown/shots/F1.S2-1.png" },
+            { "step": 2, "image": "shakedown/shots/F1.S2-2.png" },
+            { "step": 3, "image": "shakedown/shots/F1.S2-3.png" },
+            { "step": 4, "image": "shakedown/shots/F1.S2-4.png" }
+          ],
+          "base_shots": [
+            { "step": 1, "image": "shakedown/shots/F1.S2-b1.png" },
+            { "step": 2, "image": "shakedown/shots/F1.S2-b2.png" },
+            { "step": 3, "image": "shakedown/shots/F1.S2-b3.png" },
+            { "step": 4, "image": "shakedown/shots/F1.S2-b4.png" }
+          ],
+          "image": "shakedown/shots/F1.S2-4.png"
+        },
+        {
+          "id": "F1.U1",
+          "type": "unexpected",
+          "category": "boundaries",
+          "title": "Quantity of zero",
+          "setup": "Signed in as Agent, on the Orders page",
+          "steps": ["Click New order", "Click Add line and choose Blue mug", "Type 0 in Quantity", "Click Save"],
+          "expected": "An error under Quantity, and nothing stored",
+          "risk": "StoreOrderRequest.php:24 has no minimum on quantity",
+          "status": "fail",
+          "actual": "Typing 0 empties the whole line row, so the scenario can't reach Save",
+          "evidence": "TypeError: Cannot read properties of undefined (reading 'product') at OrderSidebar.tsx:112",
+          "severity": "major",
+          "why": "An agent who mistypes a quantity loses the row and has to start it again",
+          "verdict": "defect",
+          "shots": [
+            { "step": 1, "image": "shakedown/shots/F1.U1-1.png" },
+            { "step": 2, "image": "shakedown/shots/F1.U1-2.png" },
+            { "step": 3, "image": "shakedown/shots/F1.U1-3.png", "note": "The line row disappeared when 0 was typed, so there was nothing left to save" }
+          ],
+          "image": "shakedown/shots/F1.U1-3.png"
+        }
+      ]
+    }
+  ]
+}

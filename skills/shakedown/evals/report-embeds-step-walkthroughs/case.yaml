@@ -1,0 +1,11 @@
+schema_version: "1.1"
+name: report-embeds-step-walkthroughs
+expected_outcome: |
+  From a finished run's shakedown.json and its step shots, the PR comment gives every scenario a
+  walkthrough: each step numbered, in order, with its own screenshot from the shakedown-assets
+  prefix beneath it. The failed scenario's ticket shows its walkthrough under Steps to reproduce
+  and its Base walkthrough under Base. A step that couldn't be done says why, and the steps after
+  it say they weren't reached, with no image. The comment is written to a file, not posted, and
+  carries no database command.
+context:
+  scaffold_script: place-files.sh

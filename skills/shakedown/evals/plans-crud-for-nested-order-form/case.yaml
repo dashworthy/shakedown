@@ -1,0 +1,13 @@
+schema_version: "1.1"
+name: plans-crud-for-nested-order-form
+expected_outcome: |
+  shakedown.json lists the order features from the spec, with success scenarios for creating,
+  updating and deleting an order and its lines, each with a read-only database check, including
+  a round trip that saves the edit form unchanged and expects no line rows to be re-created.
+  Unexpected-use scenarios are grounded in the code's gaps (no minimum on quantity, no max on
+  notes against a 255-character column, update deleting and re-inserting lines), and deleting an
+  invoiced order is an open question because the spec doesn't say. Database checks match whole
+  markers, and updates and deletes find their record by the marker of the scenario that created
+  it. The run stops at Stop 2.
+context:
+  scaffold_script: place-files.sh

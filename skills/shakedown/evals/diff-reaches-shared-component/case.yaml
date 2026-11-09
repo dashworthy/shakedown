@@ -1,0 +1,10 @@
+schema_version: "1.1"
+name: diff-reaches-shared-component
+expected_outcome: |
+  Walking up from the branch's diff, shakedown.json has the new close-a-ticket flow as a new
+  feature and the tickets list and project page as reached features through the changed
+  StatusBadge component, with smoke scenarios only. The pruning command change is out of scope
+  with a reason. Closing an already-closed ticket is an unexpected-use scenario grounded in
+  close() having no status check, and the close scenario's database check reads the new columns.
+context:
+  scaffold_script: place-files.sh

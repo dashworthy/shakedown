@@ -1,11 +1,11 @@
 {
   "name": "shakedown",
-  "description": "Shake down a PR in the running app before it merges: map the diff to every page, link and form it reaches, walk each one in Chrome for regressions, broken behavior, bad or inconsistent UI and confusing flows, confirm regressions on the base branch, and post a tldraw board of every screenshot, the findings and the coverage as a PR comment. Report-only — never edits app code.",
-  "version": "0.1.0",
+  "description": "Shake down a PR, branch, spec or feature area in the running app, in phases on one tldraw doc: find every feature in scope, every way to prove each one works (create, update and delete included), and every way a user could make it misbehave, compile them into a scenario list for you to approve, then test each scenario in Chrome with a screenshot of every step and a read-only database check. Confirms failures on the base branch, leaves a failing browser test per bug, and posts the board and results as a PR comment. Report-only — never edits app code.",
+  "version": "0.2.0",
   "author": {
     "name": "Andrew Leach",
     "email": "7387639+andyleach@users.noreply.github.com"
   },
   "license": "MIT",
-  "keywords": ["qa", "code-review", "browser", "claude-in-chrome", "tldraw", "regressions", "ui", "report-only"]
+  "keywords": ["qa", "manual-testing", "test-plan", "edge-cases", "browser", "claude-in-chrome", "tldraw", "database", "regressions", "report-only"]
 }

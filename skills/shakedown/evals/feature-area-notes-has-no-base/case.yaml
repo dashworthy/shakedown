@@ -1,0 +1,11 @@
+schema_version: "1.1"
+name: feature-area-notes-has-no-base
+expected_outcome: |
+  For a feature area with no diff, every feature is existing, Base is skipped, and the project's
+  test plan is used as a source of expected behavior. Creating and deleting a note each get
+  scenarios with database checks, the delete expecting a soft delete and saying what happens to
+  the note's attachments. Editing, which only the server allows, is noted rather than planned.
+  Attachment type and size limits get unexpected-use scenarios, and the delete permission
+  scenario is not tested because there is no second user.
+context:
+  scaffold_script: place-files.sh

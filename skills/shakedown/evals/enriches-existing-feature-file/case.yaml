@@ -1,0 +1,12 @@
+schema_version: "1.1"
+name: enriches-existing-feature-file
+expected_outcome: |
+  Adding a note has a feature file from an earlier run, so its scenarios are the starting point:
+  the ones that still apply keep their ids, the ones whose control was renamed (Subject is now
+  Title) are updated and marked changed, editing a note is proposed for retirement because no
+  page offers it any more, and new scenarios continue the numbering after the retired ids. The
+  earlier decision about closed tickets survives. Deleting a note has no file, so it is
+  planned from scratch. After approval, the existing file is updated in place, a new file is
+  written for deleting a note in the same format, and .shakedown/README.md explains the folder.
+context:
+  scaffold_script: place-files.sh

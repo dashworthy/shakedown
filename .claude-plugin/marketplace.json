@@ -4,13 +4,13 @@
     "name": "Andrew Leach"
   },
   "metadata": {
-    "description": "Shake down a PR in the running app with Claude in Chrome before it merges."
+    "description": "Plan every scenario for a change, approve it, then test each one in the running app with Claude in Chrome."
   },
   "plugins": [
     {
       "name": "shakedown",
       "source": "./",
-      "description": "Walk every page a PR reaches in Chrome, confirm regressions on base, and post a screenshot board, findings and coverage to the PR."
+      "description": "Map features, success proofs and unexpected use onto a tldraw doc, then test every approved scenario in Chrome with a database check, and post the results to the PR."
     }
   ]
 }
